@@ -102,23 +102,25 @@ def main():
 def read():
     with open("number.bin", "rb") as file:
         os.system("cls||clear")
+        
         num = pickle.load(file)
+        
         print(Style.RESET_ALL + Fore.RED + f"Текущее число:\n\t(2) {num}\n\t(10) {int(num, 2)}")
 
 def write():
     with open("number.bin", "wb") as file:
-        print(Style.RESET_ALL + Fore.RED + "Введите записываемое число в двоичной форме:")
-        print(Style.RESET_ALL, end="")
-        num = input()
+        print(Style.RESET_ALL + Fore.RED + "Введите записываемое число:" + Style.RESET_ALL)
+        
+        num = bin(int(input()))[2:]
+        
         pickle.dump(num, file)
+        
         os.system("cls||clear")
         print(Style.RESET_ALL + "Запись прошла успешно!")
 
 def start():
-    print(Style.RESET_ALL)
-    print("Выберите одно из действий:")
+    print(Style.RESET_ALL + "\nВыберите одно из действий:")
     print("\t1. Запустить вычисления")
     print("\t2. Считать текущее число")
     print("\t3. Записать стартовое число")
-    print("\t4. Перевести в двоичную форму")
-    print("\t5. Выйти из программы")
+    print("\t4. Выйти из программы")
