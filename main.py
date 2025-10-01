@@ -76,8 +76,11 @@ def main():
         for i in range(5):
 
             count = 0
+            s_t = time.time()
             while (n.to01() != '1') and (not (n.to01() in List)):
                 count += 1
+                if (time.time - s_t) > 30:
+                    print("Внимание!!! Расчёт идёт слишком долго!!!\n  Может потребоваться ручная проверка")
                 if n[-1] == 0:
                     n = divide(n)
                 else:
@@ -90,6 +93,7 @@ def main():
             os.system("cls||clear")
             work_time = float(time.time()) - start_time
             print(Style.RESET_ALL + Fore.LIGHTGREEN_EX + f"Время работы программы: {int(work_time // 60 // 60 // 24)}:{int((work_time // 60 // 60) % 24)}:{int((work_time // 60) % 60)}:{work_time % 60}")
+            print(f"Затраченное время: {time.time - s_t}")
             print(Style.RESET_ALL + f"Шагов потребовалось: {count}")
             print(Style.RESET_ALL + Fore.RED + f"Число на проверке:\n\t(2)  {n_s.to01()}\n\t(10) {ba2int(n_s)}")
 
