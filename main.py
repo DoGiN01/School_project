@@ -61,12 +61,12 @@ def add(num):
 def main():
     os.system("cls||clear")
 
-    timer = int(input("Введите время работы программы в секундах:\n"))
+    timer = int(input("Введите время работы программы в секундах:\n  (Для бессрочной работы введите 0)\n"))
     List = []
     n = bitarray()
     start_time = time.time()
 
-    while (float(time.time()) - start_time) < timer:
+    while (float(time.time()) - start_time) < timer if timer > 0 else 1:
 
         with open("number.bin", "rb") as f:
             num = pickle.load(f)
