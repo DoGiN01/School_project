@@ -79,8 +79,9 @@ def main():
             s_t = time.time()
             while (n.to01() != '1') and (not (n.to01() in List)):
                 count += 1
-                if (time.time - s_t) > 30:
+                if (time.time() - s_t) > 30:
                     print("Внимание!!! Расчёт идёт слишком долго!!!\n  Может потребоваться ручная проверка")
+                
                 if n[-1] == 0:
                     n = divide(n)
                 else:
