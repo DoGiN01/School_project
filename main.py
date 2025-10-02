@@ -93,8 +93,8 @@ def main():
             
             os.system("cls||clear")
             work_time = float(time.time()) - start_time
-            print(Style.RESET_ALL + Fore.LIGHTGREEN_EX + f"Время работы программы: {int(work_time // 60 // 60 // 24)}:{int((work_time // 60 // 60) % 24)}:{int((work_time // 60) % 60)}:{work_time % 60}")
-            print(f"Затраченное время: {time.time - s_t}")
+            print(Style.RESET_ALL + Fore.LIGHTGREEN_EX + f"Время работы программы: {int(work_time // 60 // 60 // 24)}:{int((work_time // 60 // 60) % 24)}:{int((work_time // 60) % 60)}:{round(work_time % 60, 3)}")
+            print(Style.RESET_ALL + Fore.GREEN + f"Затраченное время: {round(time.time() - s_t, 3)}")
             print(Style.RESET_ALL + f"Шагов потребовалось: {count}")
             print(Style.RESET_ALL + Fore.RED + f"Число на проверке:\n\t(2)  {n_s.to01()}\n\t(10) {ba2int(n_s)}")
 
