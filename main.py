@@ -1,131 +1,138 @@
-from bitarray import bitarray
-from bitarray.util import ba2int
-from colorama import Fore, Style, init
 import time
 import os
-import pickle
-init()
 
-
-def divide(num):
-    num = num[:-1]
-    return num
-
-def multiply_and_plus(num):
-    tmp_num = num.copy()
-    tmp_num.append(0)
-    res = bitarray()
-    c = 1
-
-    for i in reversed(range(len(num))):
-        j = int(num[i]) + int(tmp_num[i+1]) + c
-        if j == 0:
-            res.insert(0, 0)
-            c = 0
-        elif j == 1:
-            res.insert(0, 1)
-            c = 0
-        elif j == 2:
-            res.insert(0, 0)
-            c = 1
-        elif j == 3:
-            res.insert(0, 1)
-            c = 1
-    else:
-        if c == 0:
-            res.insert(0, 1)
-        else:
-            res.insert(0, 0);res.insert(0, 1)
-
-    return res
-
-def add(num):
-    c = 1
-    res = bitarray()
-    for i in reversed(num):
-        j = i + c
-        if j == 0:
-            res.insert(0, 0)
-            c = 0
-        elif j == 1:
-            res.insert(0, 1)
-            c = 0
-        elif j == 2:
-            res.insert(0, 0)
-            c = 1
-    else:
-        if c == 1:
-            res.insert(0, 1)
-    return res
-
-def main():
-    os.system("cls||clear")
-
-    timer = int(input("Введите время работы программы в секундах:\n  (Для бессрочной работы введите 0)\n"))
-    List = []
-    n = bitarray()
-    start_time = time.time()
-
-    while (float(time.time()) - start_time) < timer if timer > 0 else 1:
-
-        with open("number.bin", "rb") as f:
-            num = pickle.load(f)
-            n, n_s = bitarray(num), bitarray(num)
-            del f, num
-        
-        for i in range(5):
-
-            count = 0
-            s_t = time.time()
-            while (n.to01() != '1') and (not (n.to01() in List)):
-                count += 1
-                if (time.time() - s_t) > 30:
-                    print("Внимание!!! Расчёт идёт слишком долго!!!\n  Может потребоваться ручная проверка")
-                
-                if n[-1] == 0:
-                    n = divide(n)
-                else:
-                    n = multiply_and_plus(n)
-            else:
-                if n.to01() in List:
-                    print(Style.RESET_ALL + Fore.BLUE + f"I found you! AHAHHAHAHAHAHAHAHHAHAHAHAHAHA!!!!!!!11!1!!\nYou are: {n_s}")
-                    exit("d3d0c021")
-            
-            os.system("cls||clear")
-            work_time = float(time.time()) - start_time
-            print(Style.RESET_ALL + Fore.LIGHTGREEN_EX + f"Время работы программы: {int(work_time // 60 // 60 // 24)}:{int((work_time // 60 // 60) % 24)}:{int((work_time // 60) % 60)}:{round(work_time % 60, 3)}")
-            print(Style.RESET_ALL + Fore.GREEN + f"Затраченное время: {round(time.time() - s_t, 3)}")
-            print(Style.RESET_ALL + f"Шагов потребовалось: {count}")
-            print(Style.RESET_ALL + Fore.RED + f"Число на проверке:\n\t(2)  {n_s.to01()}\n\t(10) {ba2int(n_s)}")
-
-            n = add(n_s); n_s = add(n_s)
-        
-        with open("number.bin", "wb") as f:
-            pickle.dump(n_s.to01(), f)
-        del f, n, n_s
-
-def read():
-    with open("number.bin", "rb") as file:
-        os.system("cls||clear")
-        
-        num = pickle.load(file)
-        
-        print(Style.RESET_ALL + Fore.RED + f"Текущее число:\n\t(2) {num}\n\t(10) {int(num, 2)}")
-
-def write():
-    with open("number.bin", "wb") as file:
-        print(Style.RESET_ALL + Fore.RED + "Введите записываемое число:" + Style.RESET_ALL)
-        
-        num = bin(int(input()))[2:]
-        
-        pickle.dump(num, file)
-        
-        os.system("cls||clear")
-        print(Style.RESET_ALL + "Запись прошла успешно!")
+# num1 = [123, 123123123123123] по 15
+# num2 = [123123123]
 
 def start():
-    print(Style.RESET_ALL + "\nВыберите одно из действий:")
-    print("\t1. Запустить вычисления")
-    print("\t2. Считать текущее число")
-    print("\t3. Записать стартовое число")
-    print("\t4. Выйти из программы")
+    print("""
+Выберите одно из действий:
+\t1. Запустить вычисления
+\t2. Считать текущее число
+\t3. Записать стартовое число
+\t4. Выйти из программы""")
+
+def divide_(num):
+    
+    carry = 0
+    res = []
+
+    for n in num:
+        tmp = (n + carry*(10**15)) // 2
+        carry = (n + carry*(10**15)) % 2
+        res.append(tmp)
+
+    return res
+
+def add_(num1, num2):
+    
+    dif = len(num1) - len(num2)
+    carry = 0
+    res = []
+
+    for i in reversed(range(len(num1))):
+        if i - dif >= 0:
+            tmp = num1[i] + num2[i-dif] + carry
+        else:
+            tmp = num1[i] + carry
+
+        if len(str(tmp)) > 15:
+            carry = int(str(tmp)[:-15])
+            tmp = int(str(tmp)[-15:])
+
+        res.append(tmp)
+    return list(reversed(res))
+
+def multiply_(num):
+
+    carry = 1
+    res = []
+
+    for n in reversed(num):
+        tmp = n * 3 + carry
+
+        if len(str(tmp)) > 15:
+            carry = int(str(tmp)[:-15])
+            tmp = int(str(tmp)[-15:])
+
+        res.append(tmp)
+    return list(reversed(res))
+
+def read_(mode=0):
+    
+    if mode == 1:
+        with open("number.txt", "r") as f:
+            return f.read()
+
+    with open("number.txt", "r") as f:
+        num = f.read()
+        res = []
+
+        for i in range(len(num) //15 +1):
+            res.append(int(num[-15:]))
+            num = num[:-15]
+        return list(reversed(res))
+
+def write_(num, mode=0):
+
+    if mode == 1:
+        with open("number.txt", "w") as f:
+            f.write(num)
+        return 0
+
+    with open("number.txt", "w") as f:
+        res = ""
+        for n in num:
+            res += str(n)
+        
+        f.write(res)
+
+
+def main(skip=5):
+
+    # таймер
+    timer = int(input("Введите время работы:\n\t(Для бесконечного цикла введите 0)\n"))
+    start_time = round(time.time(), 3)
+
+    # цикл загрузки
+    while (round(time.time(), 3) - start_time) < timer if timer > 0 else 1:
+        
+        # считывание числа
+        start_num = read_()
+
+        # внутренний цикл
+        for i in range(skip):
+            os.system("clear||cls")
+            
+            # стартовые значения
+            List = []
+            steps = 0
+            num = add_(start_num, [i])
+            s_time = round(time.time(), 3)
+
+            # расчёты
+            while (num != [1]) and (num not in List):
+                if num[-1] % 2 == 0:
+                    num = divide_(num)
+                else:
+                    num = multiply_(num)
+
+                steps += 1
+
+                # проверка на продолжительность
+                if (round(time.time(), 3) - s_time) > 60:
+                    print("Alert!!")
+            
+            # вывод результатов числа
+            else:
+                print(f"Время всего: {round(time.time() - start_time, 3)}")
+                print(f"Время на число: {round(time.time() - s_time, 3)}")
+                print(f"\nШагов: {steps}")
+                print(f"Проверенное число: {add_(start_num, [i])}")
+        # запись числа
+        else:
+            write_(add_(start_num, [i+1]))
+    
+    # завершение общего цикла
+    else:
+        print("Completed")
