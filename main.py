@@ -13,9 +13,10 @@ def start():
 ========================================
 Выберите одно из действий:
 \t1. Запустить вычисления
-\t2. Считать текущее число
-\t3. Записать стартовое число
-\t4. Выйти из программы""")
+\t2. Просчитать конкретное число
+\t3. Считать текущее число
+\t4. Записать стартовое число
+\t5. Выйти из программы""")
 
 # Деление на 2
 def divide_(num):
@@ -121,9 +122,53 @@ def write_(num, mode=0):
         
         f.write(res)
 
+# цикл подсчёта
+def calc(num, chunk=15):
+
+    os.system("clear||cls")
+    
+    # стартовые значения
+    s_num = ''.join(str(n) for n in num)
+    List_ = []
+    steps = 0
+    s_time = round(time.time(), 3)
+    flag = True
+
+    # расчёты
+    while ((num != ['0'*(chunk-1)+'1']) and (num != ['1'])) and (num not in List_):
+
+        List_.append(num)
+
+        if int(num[-1]) % 2 == 0:
+            num = divide_(num)
+        else:
+            num = multiply_(num)
+
+        steps += 1
+        
+        while int(num[0]) == 0:
+            num.pop(0)
+
+        # проверка на продолжительность
+        if ((round(time.time(), 3) - s_time) > 15) and flag:
+            print("Число слишком долго обрабатывается! Желательна ручная проверка!")
+            flag = False
+    
+    else:
+        while s_num[0][0] == 0:
+            s_num[0][0] = s_num[0][0][1:]
+
+        if num in List_:
+            print(f"Я нашёл цикл!!!\nОно: {num}")
+            exit(0)
+
+
+        return (round(time.time() - s_time, 3), steps, s_num)
+
+
 
 # Главный цикл обработки
-def main(skip=5):
+def main(skip=5, chunk=15):
 
     # таймер
     timer = int(input("Введите время работы:\n\t(Для бесконечного цикла введите 0)\n"))
@@ -137,46 +182,16 @@ def main(skip=5):
 
         # внутренний цикл
         for i in range(skip):
-            os.system("clear||cls")
             
-            # стартовые значения
-            List = []
-            steps = 0
-            num = add_(start_num, [i])
-            s_time = round(time.time(), 3)
-            flag = True
+            num = calc(add_(start_num, i))
 
-            # расчёты
-            while (num != ['000000000000001']) and (num not in List):
-
-                List_.append(num)
-                
-                if int(num[-1]) % 2 == 0:
-                    num = divide_(num)
-                else:
-                    num = multiply_(num)
-
-                steps += 1
-                
-                while num[0] == '000000000000000':
-                    num.pop(0)
-
-                # проверка на продолжительность
-                if ((round(time.time(), 3) - s_time) > 15) and flag:
-                    print("Число слишком долго обрабатывается! Желательна ручная проверка!")
-                    flag = False
-            
-            else:
-                if num in List:
-                    print(f"Я нашёл цикл!!!\nОно: {num}")
-                    exit(0)
-
-                # вывод результатов числа
-                work_time = round(time.time() - start_time, 3)
-                print(f"Время работы программы: {int(work_time // 60 // 60 // 24)}:{int((work_time // 60 // 60) % 24)}:{int((work_time // 60) % 60)}:{round(work_time % 60, 3)}")
-                print(f"Время на число: {round(time.time() - s_time, 3)}")
-                print(f"\nШагов: {steps}")
-                print(f"Проверенное число: {''.join(add_(start_num, [i]))}")
+            # вывод результатов числа
+            work_time = round(time.time() - start_time, 3)
+            print(f"Время работы программы: {int(work_time//60//60//24)}:{int((work_time//60//60)%24)}:{int((work_time//60)%60)}:{round(work_time%60, 3)}")
+            print(f"Время на число: {num[0]}")
+            print(f"\nШагов: {num[1]}")
+            print(f"Проверенное число: {num[2]}")
+        
         # запись числа
         else:
             write_(add_(start_num, [i+1]))
