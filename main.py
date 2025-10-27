@@ -90,7 +90,7 @@ def multiply_(num):
     return list(reversed(res))
 
 # Чтение числа из файла
-def read_(mode=0):
+def read_(mode=0, chunk=15):
     
     if mode == 1:
         with open("number.txt", "r") as f:
@@ -101,8 +101,9 @@ def read_(mode=0):
         res = []
 
         while num:
-            res.append(num[-15:])
-            num = num[:-15]
+            res.append(num[-chunk:])
+            num = num[:-chunk]
+        
         return list(reversed(res))
 
 # Запись числа в файл
@@ -147,6 +148,9 @@ def main(skip=5):
 
             # расчёты
             while (num != ['000000000000001']) and (num not in List):
+
+                List_.append(num)
+                
                 if int(num[-1]) % 2 == 0:
                     num = divide_(num)
                 else:
