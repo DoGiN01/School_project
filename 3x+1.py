@@ -3,6 +3,7 @@ import main
 
 repeat = False
 chunk = 15
+skip = 5
 
 while True:
 
@@ -43,6 +44,16 @@ while True:
         print("Done")
     
     elif action == "5":
+        option = input("""!!Внимание!! После перезапуска переменные нужно указывать заново
+        1. Через сколько чисел сохраняется результат
+        2. Размер блоков разбиения числа\n""")
+        
+        if option == '1':
+            skip = int(input("Введите значение: "))
+        elif option == '2':
+            chunk = int(input("Введите значение: "))
+    
+    elif action == "0":
         exit(0)
     
     else:

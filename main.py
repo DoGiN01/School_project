@@ -16,7 +16,8 @@ def start():
 \t2. Просчитать конкретное число
 \t3. Считать текущее число
 \t4. Записать стартовое число
-\t5. Выйти из программы""")
+\t5. Настройки
+\t0. Выйти из программы""")
 
 # Деление на 2
 def divide_(num):
@@ -183,7 +184,7 @@ def main(skip=5, chunk=15):
         # внутренний цикл
         for i in range(skip):
             
-            num = calc(add_(start_num, i))
+            num = calc(add_(start_num, [str(i)]))
 
             # вывод результатов числа
             work_time = round(time.time() - start_time, 3)
@@ -194,7 +195,7 @@ def main(skip=5, chunk=15):
         
         # запись числа
         else:
-            write_(add_(start_num, [i+1]))
+            write_(add_(start_num, [str(i+1)]))
     
     # завершение общего цикла
     else:
